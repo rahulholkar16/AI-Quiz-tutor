@@ -1,6 +1,17 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema, Types, type Date, type Mixed } from "mongoose";
 
-const OrgSchema = new Schema({
+interface I_Organization extends mongoose.Document {
+    "name": string,
+    "slug": string,
+    "billingCustomerId": string,
+    "planSku": string,
+    "seats": number,
+    "settings": Mixed,
+    "status": string,
+    createdAt: Date
+}
+
+const OrgSchema = new Schema<I_Organization>({
     name: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
     billingCustomerId: { type: String },
@@ -11,4 +22,4 @@ const OrgSchema = new Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-export const OrgModel = mongoose.model("Organization", OrgSchema);
+export const OrgModel = mongoose.model<I_Organization>("Organization", OrgSchema);
