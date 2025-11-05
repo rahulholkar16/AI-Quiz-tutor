@@ -1,23 +1,77 @@
-import axios from "axios";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import dotenv from "dotenv";
+import { cleanGeminiJSON } from "./cleanOutput.services.js";
 
-export async function generateQuiz(topic: string, numQuestions: number = 5) {
-    const key = process.env.OPENAI_API_KEY;
-    if (!key) throw new Error("OPENAI_API_KEY missing");
+dotenv.config();
+// console.log("api ", process.env.GEMINI_API_KEY);
 
-    const prompt = `Generate ${numQuestions} multiple choice questions about ${topic}. 
-Return JSON array with fields: text, options (array), answer (0-3), explanation.`;
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
-    const res = await axios.post(
-        "https://api.openai.com/v1/chat/completions",
+export const generateQuizWithGemini = async (topic: string, type: string) => {
+    const prompt = `
+        You are a coding quiz generator AI.
+        Generate 2 beginner-level ${type.toUpperCase()} questions related to "${topic}".
+        Return the result **strictly as valid JSON**, not markdown, not text.
+
+        JSON FORMAT EXAMPLES:
+
+        If type = "mcq":
         {
-            model: "gpt-4o-mini",
-            messages: [{ role: "user", content: prompt }],
-            temperature: 0.2
-        },
-        { headers: { Authorization: `Bearer ${key}` } }
-    );
+        "quizType": "mcq",
+        "topic": "${topic}",
+        "questions 1": [
+            {
+            "title": "Understanding useState",
+            "question": "Which hook allows you to manage state?",
+            "options": ["useState", "useEffect", "useMemo", "useRef"],
+            "correctAnswer": "useState",
+            "explanation": "useState helps manage component state."
+            }
+        ]
+        }
 
-    const content = res.data.choices[0].message.content;
-    const cleaned = content.replace(/```json|```/g, "");
-    return JSON.parse(cleaned);
-}
+            If type = "fillup":
+            {
+            "quizType": "fillup",
+            "topic": "${topic}",
+            "questions 1": [
+                {
+                "title": "Variable Declaration",
+                "question": "The keyword '____' declares a variable that cannot be reassigned.",
+                "correctAnswer": "const",
+                "explanation": "'const' creates immutable variables."
+                }
+            ]
+            }
+
+            If type = "codeerror":
+            {
+            "quizType": "codeerror",
+            "topic": "${topic}",
+            "questions": [
+                {
+                "title": "Missing return statement",
+                "question 1": "The function should return the sum but prints undefined.",
+                "errorCode": "function add(a,b){ console.log(a+b); }",
+                "task": "Fix to return the sum instead of logging it.",
+                "correctCode": "function add(a,b){ return a+b; }",
+                "explanation": "Missing 'return' caused undefined."
+                }
+            ]
+            }
+
+            Remember:
+            - Always return pure JSON.
+            - No markdown, no extra text.
+            - 2 questions per request.
+            `;
+
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
+
+    const result = await model.generateContent(prompt);
+
+    console.log("result is going on  : ", result.response);
+    //if(type == "codeerror") return result.response
+    const data = cleanGeminiJSON(result.response.text());
+    return data;
+};
