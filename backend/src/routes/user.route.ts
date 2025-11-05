@@ -1,4 +1,10 @@
 import { Router } from "express";
+import * as org from "../controllers/org.controller.js";
+import * as plan from "../controllers/plan.controller.js";
+import * as quiz from "../controllers/quiz.controller.js";
+import * as attempt from "../controllers/attempt.controller.js";
+import * as webhook from "../controllers/webhook.controller.js";
+
 import {
     passwordValidator,
     ValidationMiddleware,
@@ -25,11 +31,12 @@ router.route("/verify-email/:verificationToken").get(verifyEmail);
 router.route("/resend-email-verification").get(auth, resendEmailVerification);
 router.route("/refresh-token").get(refreshAccessToken);
 router.route("/forgot-password").get(forgotPassword);
-router
-    .route("/reset-password/:resetToken")
-    .post(passwordValidator, resetForgotPassword);
-router
-    .route("/changed-password")
-    .post(passwordValidator, auth, changeCurrentPassword);
+router.route("/reset-password/:resetToken").post(passwordValidator, resetForgotPassword);
+router.route("/changed-password").post(passwordValidator, auth, changeCurrentPassword);
+
+// plan route
+router.route("/plans").get( plan.listPlans);
+router.get("/plans/:sku", plan.getPlanBySku);
+
 
 export default router;
