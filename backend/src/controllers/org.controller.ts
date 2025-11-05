@@ -8,10 +8,11 @@ import slugify from "slugify";
 import { ApiResponse } from "../utils/apiResponse.js";
 
 export async function createOrg(req: Request, res: Response) {
-    
+    // @ts-ignore
+    const createSlug = (text: string) => slugify.default ? slugify.default(text, { lower: true, strict: true }) : slugify(text, { lower: true, strict: true });
     const { name, ownerName, ownerEmail, ownerPassword, planSku } = req.body;
     if (!name || !ownerName || !ownerEmail || !ownerPassword) throw new ApiError(400, "Missing field!");
-    const slug = slugify(name, { lower: true, strict: true });
+    const slug = createSlug(name);
     const existing = await OrgModel.findOne({ slug });
     if (existing) throw new ApiError(400, "Organization slug already exists");
 
