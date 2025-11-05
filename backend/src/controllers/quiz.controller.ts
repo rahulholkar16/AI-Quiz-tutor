@@ -35,3 +35,9 @@ export const getQuiz = asyncHandler(async (req: Request, res: Response) => {
     if (!quiz) throw new ApiError(400, "Not found!");
     res.status(200).json(new ApiResponse(200, quiz));
 });
+
+export const deleteQuiz = asyncHandler(async (req: Request, res: Response) => {
+    const orgId = (req as any).organization._id;
+    await QuizModel.deleteOne({ _id: req.params.id, organizationId: orgId });
+    res.json({ success: true });
+});
