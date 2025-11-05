@@ -1,27 +1,26 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const OptionSchema = new Schema({
-    id: String, // local option id (A/B/C/D)
-    text: String,
+    id: String,
+    text: String
 });
 
 const QuestionSchema = new Schema({
     text: { type: String, required: true },
     options: [OptionSchema],
-    answer: { type: String, required: true },
-    explanation: { type: String }, 
+    answer: { type: String }, // e.g. "A"
+    explanation: { type: String }
 });
 
 const QuizSchema = new Schema({
-    title: String,
-    topic: String,
+    organizationId: { type: Schema.Types.ObjectId, ref: "Organization", required: true },
     createdBy: { type: Schema.Types.ObjectId, ref: "User" },
+    title: { type: String },
+    topic: { type: String },
     questions: [QuestionSchema],
-    meta: {
-        difficulty: { type: String },
-        sourceText: { type: String }, 
-    },
-    createdAt: { type: Date, default: Date.now },
+    meta: Schema.Types.Mixed,
+    status: { type: String, enum: ["pending", "ready", "failed"], default: "pending" },
+    createdAt: { type: Date, default: Date.now }
 });
 
-export default model("Quiz", QuizSchema);
+export const QuizModel = mongoose.model("Quiz", QuizSchema);
