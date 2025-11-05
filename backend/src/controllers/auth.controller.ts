@@ -33,13 +33,14 @@ const generateAccessAndRefreshToken = async (
 };
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
-    const { name, email, password } = req.validateData;
+    const { name, email, password, organizationId } = req.validateData;
     const isExist = await UserModel.findOne({ email });
     if (isExist) throw new ApiError(409, "User already exists.");
     const newUser = await UserModel.create({
         name,
         email,
         password,
+        organizationId
     });
     const { unHashedToken, hasedToken, tokenExpiry } =
         newUser.generateTempToken();
