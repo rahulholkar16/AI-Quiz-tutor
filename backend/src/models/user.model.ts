@@ -18,6 +18,8 @@ export interface I_UserDocument extends mongoose.Document {
     "resetPasswordToken"?: string,
     "resetPasswordTokenExpire"?: Date | undefined,
     "refreshToken"?: string,
+    "role": string,
+    "organizationId": Types.ObjectId,
     isPasswordCorrect(password: string): Promise<boolean>;
     generateAccessToken(): string;
     generateRefreshToken(): string; // note: typo in your schema
@@ -32,6 +34,8 @@ const user = new Schema<I_UserDocument>({
     "name": { type: String, required: true },
     "email": { type: String, unique: true, required: true },
     "password": { type: String, required: true },
+    "organizationId": { type: Schema.Types.ObjectId, ref: "Organization", required: true },
+    "role": { type: String, enum: ["owner", "admin", "member"], default: "member" },
     "avatar": { type: String },
     "content": [{ type: Schema.Types.ObjectId, ref: "Content" }],
     "isVerified": { type: Boolean, default: false },
