@@ -16,5 +16,5 @@ app.use(cors({
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"]
 }));
-app.use("/api/v1/auth", authRouter);
+app.use("/api/v1", authRouter);
 export default app;
