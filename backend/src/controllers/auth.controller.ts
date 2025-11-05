@@ -12,6 +12,7 @@ import type { Types } from "mongoose";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import type { JwtPayload } from "../types/jwtPayload.js";
+import { OrgModel } from "../models/organization.model.js";
 
 const generateAccessAndRefreshToken = async (
     userId: string | Types.ObjectId
@@ -33,14 +34,18 @@ const generateAccessAndRefreshToken = async (
 };
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
-    const { name, email, password, organizationId } = req.validateData;
+    const { name, email, password, organizationName } = req.validateData;
     const isExist = await UserModel.findOne({ email });
     if (isExist) throw new ApiError(409, "User already exists.");
+    const isOrg = await OrgModel.findOne({name: "Other"});
+    console.log(isOrg);
+    
+    if (!isOrg) throw new ApiError(400, "Org is not found!");
     const newUser = await UserModel.create({
         name,
         email,
         password,
-        organizationId
+        organizationId: isOrg?._id
     });
     const { unHashedToken, hasedToken, tokenExpiry } =
         newUser.generateTempToken();
