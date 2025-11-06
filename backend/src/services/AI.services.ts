@@ -1,16 +1,16 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import dotenv from "dotenv";
-import { cleanGeminiJSON } from "./cleanOutput.services.js";
+import { cleanAndParseAIJson } from "./cleanJson.services.js";
 
 dotenv.config();
 // console.log("api ", process.env.GEMINI_API_KEY);
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
 
-export const generateQuizWithGemini = async (topic: string, type: string) => {
+export const generateQuizWithGemini = async (topic: string, type: string, questionNo: number) => {
     const prompt = `
         You are a coding quiz generator AI.
-        Generate 2 beginner-level ${type.toUpperCase()} questions related to "${topic}".
+        Generate ${questionNo} ${type.toUpperCase()} questions related to "${topic}".
         Return the result **strictly as valid JSON**, not markdown, not text.
 
         JSON FORMAT EXAMPLES:
@@ -71,7 +71,7 @@ export const generateQuizWithGemini = async (topic: string, type: string) => {
     const result = await model.generateContent(prompt);
 
     console.log("result is going on  : ", result.response);
-    //if(type == "codeerror") return result.response
-    const data = cleanGeminiJSON(result.response.text());
+    // if(type == "codeerror") return result.response.text()
+    const data = cleanAndParseAIJson(result.response.text());
     return data;
 };

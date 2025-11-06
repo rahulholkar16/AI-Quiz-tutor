@@ -8,6 +8,7 @@ declare global {
         interface Request {
             user?: I_UserDocument;
             validateData?: z.infer<typeof UserSchema>;
+            organization?: any
         }
     }
 }
