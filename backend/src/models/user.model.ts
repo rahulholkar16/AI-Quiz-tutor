@@ -68,6 +68,7 @@ user.methods.generateAccessToken = function () {
         {
             _id: this._id as string,
             email: this.email,
+            OrgId: this.organizationId
         },
         process.env.ACCESS_JWT_SECRET!,
         { expiresIn: process.env.ACCESS_TOKEN_EXPIRY! } as SignOptions
@@ -79,6 +80,7 @@ user.methods.generateRefreshToken = function () {
         {
             _id: this._id,
             email: this.email,
+            OrgId: this.organizationId
         },
         process.env.REFRESH_JWT_SECRET!,
         { expiresIn: process.env.REFRESH_TOKEN_EXPIRY } as SignOptions

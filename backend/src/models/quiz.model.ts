@@ -5,7 +5,6 @@ const OptionSchema = new Schema({
     text: { type: String },
 });
 
-// --- Question subdocument ---
 const QuestionSchema = new Schema({
     type: {
         type: String,

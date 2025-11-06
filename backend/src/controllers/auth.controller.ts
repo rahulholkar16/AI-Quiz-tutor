@@ -34,10 +34,11 @@ const generateAccessAndRefreshToken = async (
 };
 
 export const register = asyncHandler(async (req: Request, res: Response) => {
-    const { name, email, password, organizationName } = req.validateData;
+    const { name, email, password } = req.validateData;
+    const { organizationName } = req.body;
     const isExist = await UserModel.findOne({ email });
     if (isExist) throw new ApiError(409, "User already exists.");
-    const isOrg = await OrgModel.findOne({name: "Other"});
+    const isOrg = await OrgModel.findOne({ name: organizationName });
     console.log(isOrg);
     
     if (!isOrg) throw new ApiError(400, "Org is not found!");
