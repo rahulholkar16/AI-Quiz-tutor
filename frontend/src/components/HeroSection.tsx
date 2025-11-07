@@ -1,7 +1,11 @@
 import React from "react";
 import Wrapper from "./Wrapper"
 import Button from "./Button";
+import {useNavigate} from "react-router";
+import { useAppSelector } from "../store/hook";
 const HeroSection: React.FC = () => {
+    const { isAuthenticated, user } = useAppSelector((s) => s.auth);
+    const navigate = useNavigate()
     return (
         <Wrapper>
             <section className="mt-10 px-4 py-10 flex flex-col gap-8 md:flex-row md:items-center">
@@ -16,7 +20,17 @@ const HeroSection: React.FC = () => {
                             quizzes on any topic.
                         </h2>
                     </div>
-                    <Button >Get Started Now</Button>
+                    <Button 
+                        onClick={() => {
+                            if(isAuthenticated){
+                                navigate("/create-quiz")
+                            } else{
+                                navigate("/auth")
+                            }
+                        }}
+                    >
+                        Get Started Now
+                    </Button>
                     {/* <button className="flex items-center justify-center h-12 px-5 bg-[#2b2bee] text-white font-bold rounded-lg hover:bg-opacity-80 transition-all duration-300">
                         Get Started Now
                     </button> */}

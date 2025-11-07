@@ -80,3 +80,18 @@ export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
         }
     }
 );
+
+
+export const fetchCurrentUser = createAsyncThunk<
+    User,
+    void,
+    { rejectValue: string }
+>("auth/fetchCurrentUser", async (_, { rejectWithValue }) => {
+    try {
+        const res = await authApi.getCurrentUser();
+        return res.data as User;
+    } catch (error: unknown) {
+        return rejectWithValue("Not authenticated");
+    }
+});
+

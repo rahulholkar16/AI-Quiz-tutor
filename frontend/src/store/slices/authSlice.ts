@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
-import { registerUser, loginUser, forgotPassword } from "../authThunks";
+import { registerUser, loginUser, forgotPassword, fetchCurrentUser } from "../authThunks";
 
 // ✅ Define your User type here
 export interface User {
@@ -8,6 +8,7 @@ export interface User {
     email: string;
     organizationId?: string;
     isVerified?: boolean;
+    createdAt?: Date
 }
 
 export interface AuthState {
@@ -74,6 +75,20 @@ const authSlice = createSlice({
             .addCase(forgotPassword.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || "Failed to send reset email";
+            })
+    
+            .addCase(fetchCurrentUser.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchCurrentUser.fulfilled, (state, action) => {
+                state.loading = false;
+                state.user = action.payload;
+                state.isAuthenticated = true;
+            })
+            .addCase(fetchCurrentUser.rejected, (state) => {
+                state.loading = false;
+                state.user = null;
+                state.isAuthenticated = false;
             });
     },
 });

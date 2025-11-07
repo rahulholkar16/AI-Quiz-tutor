@@ -60,7 +60,7 @@ export const authApi = {
 
     logout: () => fetchRequest<Record<string, never>>("/logout", "POST", {}),
 
-    getCurrentUser: () => fetchRequest<User>("/current-user", "GET"),
+    getCurrentUser: () => fetchRequest<User>("/me", "GET"),
 
     refreshToken: () => fetchRequest<Record<string, never>>("/refresh-token", "POST", {}),
 
