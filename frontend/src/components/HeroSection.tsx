@@ -1,5 +1,6 @@
 import React from "react";
 import Wrapper from "./Wrapper"
+import Button from "./Button";
 const HeroSection: React.FC = () => {
     return (
         <Wrapper>
@@ -15,9 +16,10 @@ const HeroSection: React.FC = () => {
                             quizzes on any topic.
                         </h2>
                     </div>
-                    <button className="flex items-center justify-center h-12 px-5 bg-[#2b2bee] text-white font-bold rounded-lg hover:bg-opacity-80 transition-all duration-300">
+                    <Button >Get Started Now</Button>
+                    {/* <button className="flex items-center justify-center h-12 px-5 bg-[#2b2bee] text-white font-bold rounded-lg hover:bg-opacity-80 transition-all duration-300">
                         Get Started Now
-                    </button>
+                    </button> */}
                 </div>
 
                 <div
