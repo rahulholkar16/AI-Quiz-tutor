@@ -80,6 +80,8 @@ export const register = asyncHandler(async (req: Request, res: Response) => {
 });
 
 export const login = asyncHandler(async (req: Request, res: Response) => {
+    console.log(req.body);
+    
     const { email, password } = req.body;
     if (!email || !password)
         throw new ApiError(401, "Email and Password required.");

@@ -9,14 +9,14 @@ import Home from "./pages/Home";
 const App: React.FC = () => {
     return (
         <div className="relative flex min-h-screen w-full flex-col bg-[#f6f6f8] dark:bg-[#101022] text-[#d1d1f7] overflow-x-hidden font-display">
-            <Navbar />
             <Router>
+            <Navbar />
                 <Routes>
                     <Route path="/" element={<Home />} />
-                    <Route path="/signUp" element={<AuthPage />} />
+                    <Route path="/auth" element={<AuthPage />} />
                 </Routes>
-            </Router>
             <Footer />
+            </Router>
         </div>
     );
 };

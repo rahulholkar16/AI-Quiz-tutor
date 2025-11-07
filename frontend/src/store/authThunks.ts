@@ -69,3 +69,14 @@ export const forgotPassword = createAsyncThunk<
         return rejectWithValue(extractErrorMessage(error));
     }
 });
+
+export const logoutUser = createAsyncThunk<void, void, { rejectValue: string }>(
+    "auth/logoutUser",
+    async (_, { rejectWithValue }) => {
+        try {
+            await authApi.logout(); // ✅ backend clears cookies
+        } catch (error: unknown) {
+            return rejectWithValue(extractErrorMessage(error));
+        }
+    }
+);

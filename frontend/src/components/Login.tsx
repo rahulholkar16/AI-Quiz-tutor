@@ -17,7 +17,7 @@ const Login: React.FC<LoginProps> = ({ setView }) => {
     const [form, setForm] = useState({ email: "", password: "" });
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = async () => {
 
         if (!form.email || !form.password) {
             alert("Please fill all fields.");
@@ -106,7 +106,7 @@ const Login: React.FC<LoginProps> = ({ setView }) => {
 
                     {/* Submit */}
                     <Button
-                        onClick={(e) => handleSubmit(e)}
+                        onClick={handleSubmit}
                         disabled={loading}
                         className="h-14 rounded-lg bg-[#4f46e5] font-bold text-white hover:bg-[#4f46e5]/90 focus:ring-4 focus:ring-[#4f46e5]/50 disabled:opacity-60"
                     >

@@ -22,7 +22,7 @@ import { auth } from "../middlewares/auth.middlewares.js";
 const router = Router();
 
 router.route("/register").post(ValidationMiddleware, register);
-router.route("/login").get(login);
+router.route("/login").post(login);
 router.route("/logout").delete(auth, login);
 router.route("/me").get(auth, getCurrentUser);
 router.route("/verify-email/:verificationToken").get(verifyEmail);

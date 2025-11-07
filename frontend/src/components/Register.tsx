@@ -3,14 +3,12 @@ import { useAppDispatch, useAppSelector } from "../store/hook";
 import { registerUser } from "../store/authThunks";
 import Button from "./Button";
 import type { AuthView } from "../pages/AuthPage";
-import { useNavigate } from "react-router";
 
 interface SignupProps {
     setView: Dispatch<SetStateAction<AuthView>>;
 }
 
 const Register: React.FC<SignupProps> = ({ setView }) => {
-    const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { loading, error } = useAppSelector((s) => s.auth);
 
