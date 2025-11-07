@@ -8,25 +8,27 @@ import { formatQuizData } from "../utils/quizFormatter.js";
 
 
 export const createQuiz = asyncHandler(async (req: Request, res: Response) => {
-    const { title, topic, type, questionNo } = req.body;
+    const { title, topic, quizType, questionNo } = req.body;
+    console.log(req.body);
+    
     const user = (req as any).user;
 
-    if (!topic || !type) throw new ApiError(400, "Topic and type are required!");
-    if (!["mcq", "fillup", "codeerror"].includes(type))
+    if (!topic || !quizType) throw new ApiError(400, "Topic and type are required!");
+    if (!["mcq", "fillup", "codeerror"].includes(quizType))
         throw new ApiError(400, "Invalid quiz type");
 
     const orgId = user?.organizationId;
     const userId = user?._id;
 
-    const quizData = await generateQuizWithGemini(topic, type, questionNo);
+    const quizData = await generateQuizWithGemini(topic, quizType, questionNo);
     if (!quizData) throw new ApiError(400, "Quiz generation failed!");
 
-    const formatted = formatQuizData(quizData, type);
+    const formatted = formatQuizData(quizData, quizType);
 
     const quiz = await QuizModel.create({
         organizationId: orgId,
         createdBy: userId,
-        quizType: type,
+        quizType: quizType,
         title: title || formatted.topic,
         topic: formatted.topic,
         questions: formatted.questions,
