@@ -19,7 +19,7 @@ const App: React.FC = () => {
     }, [dispatch]);
 
     return (
-        <div className="relative flex min-h-screen w-full flex-col bg-[#f6f6f8] dark:bg-[#101022] text-[#d1d1f7] overflow-x-hidden font-display">
+        <div className="relative  min-h-screen w-full flex-col bg-[#f6f6f8] dark:bg-[#101022] text-[#d1d1f7] overflow-x-hidden font-display">
             <Router>
                 <Navbar />
                 <Routes>
